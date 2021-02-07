@@ -40,7 +40,7 @@
 
   .s-info-title {
     font-size: var(--text-size-h2);
-    font-weight: 500;
+    font-weight: var(--text-font-weight-bold);
   }
 
   .s-info-text {

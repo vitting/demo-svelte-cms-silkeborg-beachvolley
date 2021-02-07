@@ -5,7 +5,7 @@
   import type { ContentSection } from "src/interfaces/content-section";
   import { onMount } from "svelte";
 
-  export let theme: number = 0; // Theme 1 = standard
+  export let theme: number = 0; // Theme 0 = standard
   export let data: ContentSection;
   export let index: number = 0;
 
@@ -25,7 +25,7 @@
   >
     <h1 class="s-title">{data.title}</h1>
 
-    <SectionIntro text={data.text} image={data.image} />
+    <SectionIntro text={data.text} image={data.image} {theme} />
     
     {#each data.paragraphs as pragraph (pragraph.id)}
       <SectionParagraph data={pragraph} />
@@ -52,7 +52,7 @@
   .section .s-title {
     text-align: center;
     font-size: var(--text-size-h1);
-    font-weight: 500;
+    font-weight: var(--text-font-weight-bold);
     margin-bottom: 1rem;
   }
 </style>

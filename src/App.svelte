@@ -28,10 +28,12 @@ import DatabaseService from "./services/database.service";
 </div>
 
 <style>
-  @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap");
+  @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;700&display=swap");
   @import url("https://fonts.googleapis.com/css2?family=Lato:wght@400;500;700&display=swap");
   :root {
     /* --text-color-theme1: #8f0909; */
+    --text-font-weight-normal: 300;
+    --text-font-weight-bold: 500;
     --text-color-theme1: #612c2c;
     --text-color-theme2: #fff;
     /* --bgcolor-theme1-color1: #fff; */
@@ -65,6 +67,7 @@ import DatabaseService from "./services/database.service";
   .App {
     display: flex;
     justify-content: center;
+    font-weight: var(--text-font-weight-normal);
   }
 
   .bgimage {
@@ -75,13 +78,20 @@ import DatabaseService from "./services/database.service";
     background-size: cover;
     background-position: center;
     filter: blur(8px);
-    /* filter: opacity(40%); */
     z-index: -1;
-    filter: blur(0.6);
   }
 
   .page {
     max-width: 1000px;
     padding: 0 1rem;
+  }
+
+  @media only screen and (max-width: 612px) {
+    .page {
+      padding: 0;
+    }
+    .bgimage {
+      background: none;
+    }
   }
 </style>

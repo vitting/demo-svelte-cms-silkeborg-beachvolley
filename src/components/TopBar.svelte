@@ -1,5 +1,9 @@
 <script lang="ts">
-  // your script goes here
+  function handleClick(id: string) {
+    console.log("CLICK", id);
+    document.getElementById(id)?.scrollIntoView();
+    
+  }
 </script>
 
 <header class="top">
@@ -9,7 +13,8 @@
   </div>
   <nav class="nav">
     <ul>
-      <li><a href="#home">Forside</a></li>
+      <!-- svelte-ignore a11y-missing-attribute -->
+      <li><a on:click="{() => {handleClick('home')}}">Forside</a></li>
       <li><a href="#coach">Træning</a></li>
       <li><a href="">Kontakt</a></li>
       <li><a href="">Bliv medlem</a></li>
@@ -25,7 +30,7 @@
     color: var(--text-color-theme2);
     padding: 1rem 0;
   }
-  
+
   .logo-container {
     display: flex;
     align-items: center;
@@ -59,15 +64,22 @@
     padding: 0.5rem;
     white-space: nowrap;
     transition: all 0.5s;
+    cursor: pointer;
   }
 
   .nav ul li:hover {
     background: var(--bgcolor-theme2-color2);
     border-radius: var(--border-radius);
   }
-  
+
   .nav ul li a {
     text-decoration: none;
     color: var(--text-color-theme2);
+  }
+
+  @media screen and (max-width: 612px) {
+    .logo-name {
+      font-size: 1.5em;
+    }
   }
 </style>
