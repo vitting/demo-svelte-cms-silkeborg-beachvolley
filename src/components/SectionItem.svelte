@@ -5,7 +5,7 @@
   import type { ContentSection } from "src/interfaces/content-section";
   import { onMount } from "svelte";
 
-  export let theme: number = 1; // Theme 1 = standard
+  export let theme: number = 0; // Theme 1 = standard
   export let data: ContentSection;
   export let index: number = 0;
 
@@ -38,11 +38,15 @@
 <style>
   .section {
     padding: 1rem;
-    border-radius: var(--border-radius);
+  }
+
+  .theme-1 {
+    background: var(--bgcolor-theme1-color1);
+    color: var(--text-color-theme1);
   }
 
   .theme-2 {
-    background-color: var(--bgcolor-theme2-color1);
+    background: var(--bgcolor-theme2-color1);
     color: var(--text-color-theme2);
   }
   .section .s-title {

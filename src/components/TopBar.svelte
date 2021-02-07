@@ -21,10 +21,9 @@
 <style>
   .top {
     font-family: var(--top-font-family);
-    background-color: var(--bgcolor-theme2-color1);
+    background: var(--bgcolor-theme2-color1);
     color: var(--text-color-theme2);
     padding: 1rem 0;
-    border-radius: 0 0 8px 8px;
   }
   
   .logo-container {
@@ -63,7 +62,7 @@
   }
 
   .nav ul li:hover {
-    background-color: var(--bgcolor-theme2-color2);
+    background: var(--bgcolor-theme2-color2);
     border-radius: var(--border-radius);
   }
   

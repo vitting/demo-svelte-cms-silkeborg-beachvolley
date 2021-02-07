@@ -2,7 +2,7 @@
   import type { ContentItem } from "src/interfaces/content-item";
 
   import SectionListItem from "./SectionListItem.svelte";
-  export let theme: number = 1; // Theme 1 = standard
+  export let theme: number = 0; // Theme 1 = standard
   export let items: ContentItem[] = [];
 </script>
 

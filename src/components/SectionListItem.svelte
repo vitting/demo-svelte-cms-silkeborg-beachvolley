@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { ContentItem } from "src/interfaces/content-item";
 
-  export let theme: number = 1; // Theme 1 = standard
+  export let theme: number = 0; // Theme 0 = standard
   export let item: ContentItem;
 </script>
 
@@ -27,10 +27,11 @@
 
 <style>
   .s-info-item {
-    background-color: var(--bgcolor-theme1-color2);
+    background: var(--bgcolor-theme1-color2);
     padding: 1rem;
     margin: 1rem 0;
     border-radius: var(--border-radius);
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.164);
   }
 
   .s-info-item:last-child {
@@ -53,16 +54,23 @@
 
   .s-info-button {
     border: none;
-    background-color: var(--bgcolor-theme1-color3);
+    background: var(--bgcolor-theme1-color3);
     color: #fff;
     padding: 0.6rem;
     border-radius: var(--border-radius);
   }
 
-  .theme-2 {
-    background-color: var(--bgcolor-theme2-color2);
+  .theme-1 {
+    background: var(--bgcolor-theme1-color2);
   }
 
+  .theme-2 {
+    background: var(--bgcolor-theme2-color2);
+  }
+
+  .theme-1 .s-info-button {
+    background-color: var(--bgcolor-theme1-color3);
+  }
   .theme-2 .s-info-button {
     background-color: var(--bgcolor-theme2-color3);
   }
