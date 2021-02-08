@@ -19,6 +19,8 @@
 
 <style>
   .s-image-desc-container {
+    margin: 0 auto;
+    width: 80%;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 2rem;
@@ -29,6 +31,7 @@
   }
 
   .s-image img {
+    /* max-width: 380px; */
     width: 100%;
     object-fit: cover;
     border-radius: var(--border-radius);
@@ -44,7 +47,6 @@
   }
 
   @media screen and (max-width: 612px) {
-
     .s-image {
       justify-self: center;
     }
@@ -56,7 +58,7 @@
     }
 
     .theme-2 .s-image {
-    order: 2;
-  }
+      order: 2;
+    }
   }
 </style>

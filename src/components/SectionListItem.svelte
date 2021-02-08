@@ -27,17 +27,13 @@
 
 <style>
   .s-info-item {
+    height: 100%;
     background: var(--bgcolor-theme1-color2);
     padding: 1rem;
-    margin: 1rem 0;
+    /* margin: 1rem 0; */
     border-radius: var(--border-radius);
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.164);
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
   }
-
-  .s-info-item:last-child {
-    margin-bottom: 0;
-  }
-
   .s-info-title {
     font-size: var(--text-size-h2);
     font-weight: var(--text-font-weight-bold);

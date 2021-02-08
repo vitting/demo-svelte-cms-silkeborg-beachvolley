@@ -29,6 +29,7 @@
     background: var(--bgcolor-theme2-color1);
     color: var(--text-color-theme2);
     padding: 1rem 0;
+    width: 100%;
   }
 
   .logo-container {
