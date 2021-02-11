@@ -4,13 +4,22 @@
   import SectionList from "./SectionList.svelte";
   import type { ContentSection } from "src/interfaces/content-section";
   import { onMount } from "svelte";
-  import { mdiPencil, mdiCloseThick, mdiPlusThick  } from "@mdi/js";
-  import Icon from "./Icon.svelte";
+  import EditBar from "./EditBar.svelte";
+import EditStore from "../stores/edit.store";
+  
   export let theme: number = 0; // Theme 0 = standard
   export let data: ContentSection;
   export let index: number = 0;
 
-  onMount(() => {});
+  onMount(() => {
+  
+  });
+
+  function handleAction(action: string) {
+    EditStore.set({...$EditStore, show: true});
+    console.log($EditStore);
+    
+  }
 
   $: theme = index % 2;
 </script>
@@ -22,80 +31,56 @@
     class:theme-1={theme === 0}
     class:theme-2={theme === 1}
   >
+    
     <div class="edit-section-container">
-      <div class="edit-section" title="edit page">
-        <button type="button" class="edit-button" title="edit page">
-          <Icon path={mdiPencil} class="edit-icon" />
-          <span class="edit-button-text">Edit page</span>
-        </button>
-        <button type="button" class="edit-button" title="add element">
-          <Icon path={mdiPlusThick } class="edit-icon" />
-          <span class="edit-button-text">Add element</span>
-        </button>
-        <button type="button" class="edit-button" title="close edit">
-          <Icon path={mdiCloseThick} class="edit-icon" />
-          <span class="edit-button-text">Exit edit</span>
-        </button>
-      </div>
+      <EditBar edit={true} add={true} showtext={true} config={{editText: "Edit section", addText: "Add section"}} />
     </div>
-    <h1 class="s-title">{data.title}</h1>
+    <div class="s-container-title">
+      <div class="s-editbar"><EditBar edit={true} on:action={(e) => handleAction(e.detail)} /></div>
+      <h1 class="s-title">{data.title}</h1>
+    </div>
 
-    <SectionIntro text={data.text} image={data.image} {theme} />
+    <SectionIntro sectionid={data.id} text={data.text} image={data.image} {theme} />
 
-    {#each data.paragraphs as pragraph (pragraph.id)}
-      <SectionParagraph data={pragraph} />
-    {/each}
+    <div class="paragraph-list">
+      <div class="paragraph-list-editbar">
+        <EditBar add={true} showtext={true} config={{addText: "Add new paragraph"}}/>
+      </div>
+      {#each data.paragraphs as pragraph (pragraph.id)}
+        <SectionParagraph data={pragraph} />
+      {/each}
+    </div>
 
     <SectionList {theme} items={data.items} />
   </section>
 {/if}
 
 <style>
-  :global(.edit-section-container button .edit-icon) {
-    width: 30px;
-    margin: 0 10px;
-    cursor: pointer;
-  }
-
-  .edit-button {
-    background-color: hsl(210, 9%, 13%);
-    border:none;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 0 10px;
-    transition: transform 0.5s;
-  }
-
-  .edit-button:hover {
-    transform: scale(1.2);
-  }
-
-  .edit-button-text {
-    font-family: var(--top-font-family);
-    font-size: 0.6rem;
-    margin-top: 3px;
-    color: white;
-  }
-  .edit-section-container {
+  .paragraph-list-editbar {
     display: flex;
     justify-content: flex-end;
-    
+  }
+  .s-container-title {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
-  .edit-section {
-    background-color: rgb(30, 33, 36);
-    color: white;
-    display: flex;
-    align-items: center;
-    border-radius: var(--border-radius);
-    padding: 10px;
+  .s-editbar {
+    position: absolute;
+    align-self: center;
+    top: 0;
   }
   .section {
     /* margin: 10px 0; */
-    padding: 0.5rem 2rem;
+    padding: 0.5rem 2rem 2rem 2rem;
     position: relative;
+  }
+
+  .edit-section-container {
+    display: flex;
+    justify-content: flex-end;
   }
 
   .theme-1 {
@@ -115,5 +100,9 @@
     margin: 1.5rem 0;
   }
   @media screen and (max-width: 612px) {
+    .edit-section-container {
+      display: flex;
+      justify-content: center;
+    }
   }
 </style>

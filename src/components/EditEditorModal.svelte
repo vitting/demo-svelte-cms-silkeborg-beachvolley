@@ -1,0 +1,36 @@
+<script lang="ts">
+    import Modal from "./Modal.svelte";
+    import EditEditor from "./EditEditor.svelte";
+    import { createEventDispatcher } from 'svelte';
+import type { EditData } from "src/interfaces/edit-data";
+    
+    export let show = false;
+    export let data: EditData;
+    let value = "";
+    const dispatch = createEventDispatcher();
+
+    function handleSave() {
+        dispatch("save", {...data, html: value});
+    }
+</script>
+
+<style> 
+    .actions {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .btn:first-child {
+        margin-right: 1rem;
+    }
+</style>
+
+<div>
+    <Modal {show} title="Edit">
+        <EditEditor html={data.html ?? ""} bind:value></EditEditor>
+        <div class="actions" slot="actions">
+            <button class="btn" on:click={handleSave}>Save</button>
+            <button clasS="btn" on:click={() => dispatch("cancel")}>Cancel</button>
+        </div>
+    </Modal>
+</div>

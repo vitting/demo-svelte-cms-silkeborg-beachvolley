@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { ContentItem } from "src/interfaces/content-item";
-
+  import EditBar from "./EditBar.svelte";
   export let theme: number = 0; // Theme 0 = standard
   export let item: ContentItem;
 </script>
@@ -11,6 +11,7 @@
     class:theme-1={theme === 0}
     class:theme-2={theme === 1}
   >
+  <EditBar edit={true} />
     <h2 class="s-info-title">
       {item.title}
     </h2>
@@ -32,7 +33,7 @@
     padding: 1rem;
     /* margin: 1rem 0; */
     border-radius: var(--border-radius);
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--box-shadow);
   }
   .s-info-title {
     font-size: var(--text-size-h2);

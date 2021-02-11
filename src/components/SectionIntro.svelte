@@ -1,7 +1,22 @@
 <script lang="ts">
+  import { onMount } from "svelte";
+  import EditBar from "./EditBar.svelte";
+  export let sectionid: string;
   export let theme: number = 0; // Theme 0 = standard
   export let text: string = "";
   export let image: string;
+
+  let desceditorId: string = "";
+  function handleActionDesc(action: string) {
+    if (text) {
+    }
+  }
+
+  function handleActionImage(action: string) {}
+
+  $: imageUrl = image;
+  $: descEditId = `desc-${sectionid}`;
+  $: imageEditId = `image-${sectionid}`;
 </script>
 
 <div
@@ -9,11 +24,25 @@
   class:theme-1={theme === 0}
   class:theme-2={theme === 1}
 >
-  <div class="s-desc">
-    {text}
+  <div class="s-container">
+    <EditBar
+      showtext={false}
+      edit={true}
+      on:action={(e) => handleActionDesc(e.detail)}
+    />
+    <div id={descEditId} class="s-desc">
+      {@html text}
+    </div>
   </div>
-  <div class="s-image">
-    <picture><img src="./images/{image}" alt="" /></picture>
+  <div class="s-container">
+    <EditBar
+      showtext={false}
+      edit={true}
+      on:action={(e) => handleActionImage(e.detail)}
+    />
+    <div class="s-image">
+      <div><img id={imageEditId} src="./images/{imageUrl}" alt="" /></div>
+    </div>
   </div>
 </div>
 
@@ -31,11 +60,11 @@
   }
 
   .s-image img {
-    /* max-width: 380px; */
     width: 100%;
+    height: 100%;
     object-fit: cover;
     border-radius: var(--border-radius);
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.164);
+    box-shadow: var(--box-shadow);
   }
 
   .theme-2 .s-desc {
