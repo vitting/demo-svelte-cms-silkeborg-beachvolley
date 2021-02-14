@@ -54,6 +54,4 @@ declare module '*.jpeg' {
 declare module '*.png' {
   const ref: string;
   export default ref;
-}
-
-/* CUSTOM: ADD YOUR OWN HERE */
+}/* CUSTOM: ADD YOUR OWN HERE */

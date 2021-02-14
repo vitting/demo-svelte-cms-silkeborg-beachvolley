@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { fade } from 'svelte/transition';
-
+  import { fade } from "svelte/transition";
 
   import Backdrop from "./Backdrop.svelte";
   export let show = false;
@@ -11,26 +10,24 @@
   }
 </script>
 
-<div>
-  {#if show}
-    <Backdrop />
-    <div class="modal-container" transition:fade="{{duration: 200}}">
-      <header class="header">{title}</header>
-      <div class="modal-inner">
-        <div class="content">
-          <slot />
-        </div>
-        <div class="actions">
-          <slot name="actions"
-            ><div class="modal-close">
-              <button class=" btn" on:click={handleClose}>Close</button>
-            </div>
-          </slot>
-        </div>
+{#if show}
+  <Backdrop />
+  <div class="modal-container" transition:fade={{ duration: 200 }}>
+    <header class="header">{title}</header>
+    <div class="modal-inner">
+      <div class="content">
+        <slot />
+      </div>
+      <div class="actions">
+        <slot name="actions"
+          ><div class="modal-close">
+            <button class=" btn" on:click={handleClose}>Close</button>
+          </div>
+        </slot>
       </div>
     </div>
-  {/if}
-</div>
+  </div>
+{/if}
 
 <style>
   .modal-container {
@@ -51,7 +48,9 @@
   .header {
     background-color: var(--modal-bgcolor);
     color: var(--modal-color);
-    padding: 0.5rem 1rem;
+    padding: 0 1rem;
+    font-size: 1rem;
+    line-height: 2rem;
   }
 
   .actions {

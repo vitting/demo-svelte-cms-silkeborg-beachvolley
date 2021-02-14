@@ -1,0 +1,15 @@
+export type MimeTypes =
+  | "image/*"
+  | "image/png"
+  | "image/jpeg"
+  | "image/bmp"
+  | "image/gif"
+  | "image/svg+xml"
+  | "image/webp"
+  | ".jpg"
+  | ".jpeg"
+  | ".bmp"
+  | ".gif"
+  | ".png"
+  | ".svg"
+  | ".webp";
