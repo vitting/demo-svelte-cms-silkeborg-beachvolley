@@ -3,21 +3,23 @@
   import Cropper from "cropperjs";
   import { createEventDispatcher } from "svelte";
   import UploadImageButton from "./UploadImageButton.svelte";
-  import Spinner from "./Spinner.svelte";
   import Modal from "./Modal.svelte";
   import type { CroppedImageData } from "src/interfaces/cropped-image-data";
-  import type { EditData } from "src/interfaces/edit-data";
+  import type { EditData } from "../interfaces/edit-data";
+  import LoadingSpinnerStore from "../stores/loading-spinner.store";
   export let show = true;
   export let aspectRatioSquare = false;
   export let data: EditData;
   export let resizeCroppedImage = false;
+  export let resizeWidth = 500;
+  export let resizeHeight = 500;
   let cropper: Cropper;
-  let loading = false;
   let imageEl: HTMLImageElement;
   let imageLoaded = false;
   let cropReady = false;
-  let cropWidth = 0;
-  let cropHeight = 0;
+  let cropWidthInfo = 0;
+  let cropHeightInfo = 0;
+  let filename = "";
   const dispatch = createEventDispatcher();
 
   function destroyCropperIfExists() {
@@ -42,8 +44,8 @@
         cropReady = true;
       },
       crop: (e) => {
-        cropWidth = Math.round(e.detail.width);
-        cropHeight = Math.round(e.detail.height);
+        cropWidthInfo = Math.round(e.detail.width);
+        cropHeightInfo = Math.round(e.detail.height);
       },
     });
 
@@ -55,19 +57,33 @@
   }
 
   function handleCropImage() {
-    const { width, height } = cropper.getData(true);
+    let { width, height } = cropper.getData(true);
     const options: Cropper.GetCroppedCanvasOptions = {
-      width: aspectRatioSquare && resizeCroppedImage && width > 500 ? 500 : 0,
-      height: aspectRatioSquare && resizeCroppedImage && height > 500 ? 500 : 0,
+      width: 0,
+      height: 0,
     };
-    const canvas = cropper.getCroppedCanvas(options);
-    console.log(canvas);
+    if (resizeCroppedImage && width > resizeWidth) {
+      options.width = resizeWidth;
+      width = resizeWidth;
+    }
 
-    const imageData = canvas.toDataURL();
+    if (resizeCroppedImage && height > resizeHeight) {
+      options.height = resizeHeight;
+      height = resizeHeight;
+    }
+
+    const canvas = cropper.getCroppedCanvas(options);
+
+    const imageDataJpg = canvas.toDataURL("image/jpeg", 0.75);
+    const imageDataWebp = canvas.toDataURL("image/webp", 0.75);
+    console.log(imageDataJpg.length, imageDataWebp.length);
+
     const croppedImageData: CroppedImageData = {
       width,
       height,
-      imageData,
+      filename,
+      dataJpeg: imageDataJpg,
+      dataWebp: imageDataWebp,
       elementId: data.elementId,
       sectionId: data.sectionId,
     };
@@ -75,27 +91,41 @@
     dispatch("crop", croppedImageData);
   }
 
-  function handleFile(files: FileList) {
+  async function handleFile(files: FileList) {
     const file = files.item(0);
-    const fr = new FileReader();
-    cropReady = false;
-    imageLoaded = true;
-    fr.onloadstart = (e) => {
-      loading = true;
-    };
-
-    fr.onloadend = (e) => {
-      loading = false;
-    };
-
-    fr.onload = () => {
-      addCropper(fr.result as string);
-    };
-
-    fr.readAsDataURL(file!);
+    if (file) {
+      LoadingSpinnerStore.set(true);
+      filename = file.name;
+      cropReady = false;
+      imageLoaded = true;
+      try {
+        const dataUrl = await loadFile(file);
+        addCropper(dataUrl);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        LoadingSpinnerStore.set(false);
+      }
+    }
   }
 
-  $: infoText = `W: ${cropWidth} / H: ${cropHeight}`;
+  function loadFile(file: File) {
+    return new Promise<string>((resolve, reject) => {
+      const fr = new FileReader();
+
+      fr.onerror = (error) => {
+        reject(error);
+      };
+
+      fr.onload = () => {
+        resolve(fr.result as string);
+      };
+
+      fr.readAsDataURL(file!);
+    });
+  }
+
+  $: infoText = `W: ${cropWidthInfo} / H: ${cropHeightInfo}`;
 </script>
 
 <div>
@@ -106,21 +136,20 @@
           <img class="image" src="" alt="" bind:this={imageEl} />
           <div class="image-info">{infoText}</div>
         </div>
-        <div class="spinner"><Spinner show={loading} /></div>
       {:else}
         <p class="no-image">No image choosen</p>
       {/if}
       <UploadImageButton
         accept={[".png", ".jpeg", ".jpg", ".webp", ".gif"]}
         on:change={(e) => handleFile(e.detail)}
-        disabled={loading}>Choose file</UploadImageButton
+        disabled={$LoadingSpinnerStore}>Choose file</UploadImageButton
       >
     </div>
     <div class="actions" slot="actions">
       <button class="btn" on:click={handleCropImage} disabled={!cropReady}
         >Crop</button
       >
-      <button clasS="btn" on:click={handleCancel} disabled={loading}
+      <button clasS="btn" on:click={handleCancel} disabled={$LoadingSpinnerStore}
         >Cancel</button
       >
     </div>
@@ -159,10 +188,5 @@
 
   .btn:first-child {
     margin-right: 1rem;
-  }
-
-  .spinner {
-    display: flex;
-    justify-content: center;
   }
 </style>

@@ -36,7 +36,7 @@
     top: 20vh;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 999;
+    z-index: 101;
     max-width: 500px;
     box-shadow: var(--box-shadow);
   }

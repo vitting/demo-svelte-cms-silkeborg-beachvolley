@@ -47,6 +47,8 @@
   --modal-bgcolor: rgb(27, 97, 167);
   --modal-color: #fff;
   --spinner-bgcolor: rgb(27, 97, 167);
+  --loaderspinner-bgcolor: #ffffff;
+  --loaderspinner-color: #005891;
   --spinner-size: 30px;
   --spinner-thickness: 4px;
 }

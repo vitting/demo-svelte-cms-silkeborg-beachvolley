@@ -1,7 +1,9 @@
 export interface CroppedImageData {
     width: number;
     height: number;
-    imageData: string;
+    filename: string;
+    dataJpeg: string;
+    dataWebp: string;
     sectionId: string;
     elementId: string;
 }

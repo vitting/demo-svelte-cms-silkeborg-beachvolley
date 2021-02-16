@@ -13,6 +13,6 @@ import { fade } from "svelte/transition";
     width: 100vw;
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.4);
-    z-index: 50;
+    z-index: 100;
   }
 </style>

@@ -7,8 +7,10 @@
   let quill: Quill;
   onMount(() => {
     value = html;
+    // Quill.register('modules/imageResize', ImageResize);
     quill = new Quill("#editor", {
       modules: {
+        // imageResize: {},
         toolbar: {
           container: [
             ["bold", "italic"],
@@ -16,9 +18,9 @@
             [{ list: "ordered" }, { list: "bullet" }],
           ],
           handlers: {
-            //   image: () => {
-            //       console.log("IMAGE");
-            //   }
+              // image: () => {
+              //     console.log("IMAGE");
+              // }
           },
         },
       },
