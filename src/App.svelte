@@ -25,6 +25,7 @@
     const domparser = new DOMParser();
     const doc = domparser.parseFromString(data.html!, "text/html");
     const images = doc.querySelectorAll("img");
+    LoadingSpinnerStore.set(true);
     for (const image of images) {
       let resize_to = image.width;
       if (image.width === 0 || image.width > 500) {
@@ -40,6 +41,7 @@
       );
       image.src = uploadData.urlJpeg;
     }
+    LoadingSpinnerStore.set(false);
 
     console.log(doc.body.innerHTML);
 
@@ -63,6 +65,8 @@
     EditStore.set({
       show: false,
       type: "none",
+      clickX: 0,
+      clickY: 0,
       data: { elementId: "", sectionId: "" },
     });
   }
@@ -76,6 +80,7 @@
     <EditEditorModal
       {data}
       show={$EditStore.show}
+      positionY={$EditStore.clickY}
       on:cancel={clearEditstore}
       on:save={(e) => handleSave(e.detail)}
     />

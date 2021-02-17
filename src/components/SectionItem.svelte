@@ -5,20 +5,22 @@
   import type { ContentSection } from "src/interfaces/content-section";
   import { onMount } from "svelte";
   import EditBar from "./EditBar.svelte";
-import EditStore from "../stores/edit.store";
-  
+  import EditStore from "../stores/edit.store";
+  import type { EditbarAction } from "../interfaces/editbar-action";
+
   export let theme: number = 0; // Theme 0 = standard
   export let data: ContentSection;
   export let index: number = 0;
 
-  onMount(() => {
-  
-  });
+  onMount(() => {});
 
-  function handleAction(action: string) {
-    EditStore.set({...$EditStore, show: true});
-    console.log($EditStore);
-    
+  function handleAction(action: EditbarAction) {
+    EditStore.set({
+      ...$EditStore,
+      show: true,
+      clickX: action.clickX,
+      clickY: action.clickY,
+    });
   }
 
   $: theme = index % 2;
@@ -31,20 +33,35 @@ import EditStore from "../stores/edit.store";
     class:theme-1={theme === 0}
     class:theme-2={theme === 1}
   >
-    
     <div class="edit-section-container">
-      <EditBar edit={true} add={true} showtext={true} config={{editText: "Edit section", addText: "Add section"}} />
+      <EditBar
+        edit={true}
+        add={true}
+        showtext={true}
+        config={{ editText: "Edit section", addText: "Add section" }}
+      />
     </div>
     <div class="s-container-title">
-      <div class="s-editbar"><EditBar edit={true} on:action={(e) => handleAction(e.detail)} /></div>
+      <div class="s-editbar">
+        <EditBar edit={true} on:action={(e) => handleAction(e.detail)} />
+      </div>
       <h1 class="s-title">{data.title}</h1>
     </div>
 
-    <SectionIntro sectionid={data.id} text={data.text} image={data.image} {theme} />
+    <SectionIntro
+      sectionid={data.id}
+      text={data.text}
+      image={data.image}
+      {theme}
+    />
 
     <div class="paragraph-list">
       <div class="paragraph-list-editbar">
-        <EditBar add={true} showtext={true} config={{addText: "Add new paragraph"}}/>
+        <EditBar
+          add={true}
+          showtext={true}
+          config={{ addText: "Add new paragraph" }}
+        />
       </div>
       {#each data.paragraphs as pragraph (pragraph.id)}
         <SectionParagraph data={pragraph} />

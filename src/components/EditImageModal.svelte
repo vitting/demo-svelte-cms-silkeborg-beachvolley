@@ -13,6 +13,8 @@
   export let resizeCroppedImage = false;
   export let resizeWidth = 500;
   export let resizeHeight = 500;
+  export let positionX = 0;
+  export let positionY = 0;
   let cropper: Cropper;
   let imageEl: HTMLImageElement;
   let imageLoaded = false;

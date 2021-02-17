@@ -1,19 +1,72 @@
 <script lang="ts">
-  import { fade } from "svelte/transition";
+  import { onMount } from "svelte";
 
+  import { fade } from "svelte/transition";
   import Backdrop from "./Backdrop.svelte";
   export let show = false;
   export let title = "";
-
+  export let positionX = 0;
+  export let positionY = 0;
+  let modalEl: HTMLDivElement;
+  let windowInnerWidth = 0;
+  let move = false;
   function handleClose() {
     show = false;
   }
+
+  function handleMouseDown(e: MouseEvent) {
+    e.preventDefault();
+    if (windowInnerWidth > 612) {
+      modalEl.style.opacity = "0.7";
+      modalEl.style.cursor = "move";
+      move = true;
+    }
+  }
+
+  function handleMouseUp(e: MouseEvent) {
+    e.preventDefault();
+    modalEl.style.opacity = "1";
+    modalEl.style.cursor = "default";
+    move = false;
+  }
+
+  function handleMouseMove(e: MouseEvent) {
+    e.preventDefault();
+    if (move) {
+      if (e.pageY > 0) {
+        modalEl.style.top = e.pageY.toString() + "px";
+      }
+
+      if (e.pageX > 0) {
+        modalEl.style.left = e.pageX.toString() + "px";
+      }
+    }
+  }
+
+  onMount(() => {
+    modalEl.style.top = positionY - 100 + "px";
+  });
 </script>
+
+<svelte:window
+  on:mousemove={handleMouseMove}
+  bind:innerWidth={windowInnerWidth}
+/>
 
 {#if show}
   <Backdrop />
-  <div class="modal-container" transition:fade={{ duration: 200 }}>
-    <header class="header">{title}</header>
+  <div
+    class="modal-container"
+    bind:this={modalEl}
+    transition:fade={{ duration: 200 }}
+  >
+    <header
+      class="header"
+      on:mousedown={handleMouseDown}
+      on:mouseup={handleMouseUp}
+    >
+      {title}
+    </header>
     <div class="modal-inner">
       <div class="content">
         <slot />
@@ -37,7 +90,8 @@
     left: 50%;
     transform: translateX(-50%);
     z-index: 101;
-    max-width: 500px;
+
+    width: 500px;
     box-shadow: var(--box-shadow);
   }
 
@@ -51,6 +105,12 @@
     padding: 0 1rem;
     font-size: 1rem;
     line-height: 2rem;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+  }
+
+  .header:hover {
+    cursor: move;
   }
 
   .actions {
@@ -60,5 +120,15 @@
   .modal-close {
     display: flex;
     justify-content: flex-end;
+  }
+
+  @media screen and (max-width: 612px) {
+    .modal-container {
+      width: auto;
+      max-width: 500px;
+      left: 0;
+      transform: translateX(0);
+      margin: 0 1rem;
+    }
   }
 </style>

@@ -9,7 +9,8 @@
     mdiDelete,
   } from "@mdi/js";
   import Icon from "./Icon.svelte";
-import type { EditBarConfig } from "src/interfaces/editbar-config";
+  import type { EditBarConfig } from "../interfaces/editbar-config";
+  import type { EditbarAction } from "../interfaces/editbar-action";
 
   export let edit = false;
   export let exit = false;
@@ -23,25 +24,34 @@ import type { EditBarConfig } from "src/interfaces/editbar-config";
     moveText: "Move",
     exitText: "Exit",
     removeText: "Delete",
-    saveText: "Save"
+    saveText: "Save",
   };
 
   export let showtext = false;
   const dispatch = createEventDispatcher();
 
-  function handleClick(action: string) {
-    dispatch("action", action);
+  function handleClick(e: MouseEvent, action: string) {
+    const editbarAction: EditbarAction = {
+      action,
+      clickX: e.pageX,
+      clickY: e.pageY,
+    };
+    dispatch("action", editbarAction);
   }
 </script>
 
 <div class="edit-section-main">
-  <div class="edit-section" class:showtext={showtext === false}  title="edit page">
+  <div
+    class="edit-section"
+    class:showtext={showtext === false}
+    title="edit page"
+  >
     {#if edit}
       <button
         type="button"
         class="edit-button"
         title={config.editText}
-        on:click={() => handleClick("edit")}
+        on:click={(e) => handleClick(e, "edit")}
       >
         <Icon path={mdiPencil} class="edit-icon" />
         <span class="edit-button-text">{config.editText}</span>
@@ -52,7 +62,7 @@ import type { EditBarConfig } from "src/interfaces/editbar-config";
         type="button"
         class="edit-button"
         title={config.exitText}
-        on:click={() => handleClick("exit")}
+        on:click={(e) => handleClick(e, "exit")}
       >
         <Icon path={mdiCloseThick} class="edit-icon" />
         <span class="edit-button-text">{config.exitText}</span>
@@ -63,19 +73,19 @@ import type { EditBarConfig } from "src/interfaces/editbar-config";
         type="button"
         class="edit-button"
         title={config.saveText}
-        on:click={() => handleClick("save")}
+        on:click={(e) => handleClick(e, "save")}
       >
         <Icon path={mdiContentSaveEdit} class="edit-icon" />
         <span class="edit-button-text">{config.saveText}</span>
       </button>
     {/if}
-  
+
     {#if add}
       <button
         type="button"
         class="edit-button"
         title={config.addText}
-        on:click={() => handleClick("add")}
+        on:click={(e) => handleClick(e, "add")}
       >
         <Icon path={mdiPlusThick} class="edit-icon" />
         <span class="edit-button-text">{config.addText}</span>
@@ -86,7 +96,7 @@ import type { EditBarConfig } from "src/interfaces/editbar-config";
         type="button"
         class="edit-button"
         title={config.removeText}
-        on:click={() => handleClick("delete")}
+        on:click={(e) => handleClick(e, "delete")}
       >
         <Icon path={mdiDelete} class="edit-icon" />
         <span class="edit-button-text">{config.removeText}</span>
@@ -97,7 +107,7 @@ import type { EditBarConfig } from "src/interfaces/editbar-config";
         type="button"
         class="edit-button"
         title={config.moveText}
-        on:click={() => handleClick("move")}
+        on:click={(e) => handleClick(e, "move")}
       >
         <Icon path={mdiArrowUpDown} class="edit-icon" />
         <span class="edit-button-text">{config.moveText}</span>

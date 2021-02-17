@@ -6,6 +6,8 @@
 
   export let show = false;
   export let data: EditData;
+  export let positionX = 0;
+  export let positionY = 0;
   let value = "";
   const dispatch = createEventDispatcher();
 
@@ -15,7 +17,7 @@
 </script>
 
 <div>
-  <Modal {show} title="Edit">
+  <Modal {show} title="Edit" {positionX} {positionY}>
     <EditEditor html={data.html ?? ""} bind:value />
     <div class="actions" slot="actions">
       <button class="btn" on:click={handleSave}>Save</button>
