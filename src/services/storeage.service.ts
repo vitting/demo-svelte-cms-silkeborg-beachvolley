@@ -41,4 +41,14 @@ export default class StorageService {
       );
     });
   }
+
+  static async getListOfImages() {
+    const ref = storage.ref(this.path);
+    const res = await ref.listAll();
+    for (const item of res.items) {
+      console.log(item.name);
+    }
+    
+
+  }
 }

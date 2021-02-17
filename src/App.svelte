@@ -9,7 +9,9 @@
   import type { CroppedImageData } from "./interfaces/cropped-image-data";
   import StorageService from "./services/storeage.service";
   import SpinnerLoader from "./components/SpinnerLoader.svelte";
-import LoadingSpinnerStore from "./stores/loading-spinner.store";
+  import LoadingSpinnerStore from "./stores/loading-spinner.store";
+  import Cropper from "cropperjs";
+  import ImageService from "./services/image.service";
 
   const data: EditData = {
     elementId: "",
@@ -19,31 +21,40 @@ import LoadingSpinnerStore from "./stores/loading-spinner.store";
       "<h1>KOm si kom sa</h1><p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum id doloremqueut ad, magnam recusandae distinctio delectus quibusdam. Vitae id perspiciatis unde dolorem adipisci praesentium quisquam consequuntur, eveniet earum veniam? Iusto, vero assumenda ut aliquam quia, provident enim perferendis sit, odio voluptatem eaque dolorum et eum nam. Cupiditate culpa, non nisi velit ad nulla itaque, optio quae atque, debitis doloremque!</p>",
   };
 
+  async function handleSave(data: EditData) {
+    const domparser = new DOMParser();
+    const doc = domparser.parseFromString(data.html!, "text/html");
+    const images = doc.querySelectorAll("img");
+    for (const image of images) {
+      let resize_to = image.width;
+      if (image.width === 0 || image.width > 500) {
+        resize_to = 500;
+      }
 
-  function handleSave(data: EditData) {
-    console.log(data);
+      const data = await ImageService.resize(image, resize_to);
+      const uploadData = await ImageService.uploadImages(
+        data.dataWebp,
+        data.dataJpeg,
+        data.width,
+        data.height
+      );
+      image.src = uploadData.urlJpeg;
+    }
+
+    console.log(doc.body.innerHTML);
+
     clearEditstore();
   }
 
   async function handleCrop(data: CroppedImageData) {
-    const url1 = await StorageService.addImage(
-      data.dataJpeg,
-      data.filename,
-      data.width,
-      data.height,
-      "jpeg"
-    );
-    const url2 = await StorageService.addImage(
+    const uploadData = await ImageService.uploadImages(
       data.dataWebp,
-      data.filename,
+      data.dataJpeg,
       data.width,
       data.height,
-      "webp"
+      data.filename
     );
-
-    console.log(url1);
-    console.log(url2);
-    
+    console.log(uploadData);
 
     clearEditstore();
   }
@@ -59,7 +70,7 @@ import LoadingSpinnerStore from "./stores/loading-spinner.store";
 
 <div class="App">
   {#if $LoadingSpinnerStore}
-    <SpinnerLoader></SpinnerLoader>
+    <SpinnerLoader />
   {/if}
   {#if $EditStore.show}
     <EditEditorModal
@@ -68,20 +79,6 @@ import LoadingSpinnerStore from "./stores/loading-spinner.store";
       on:cancel={clearEditstore}
       on:save={(e) => handleSave(e.detail)}
     />
-    <!-- <EditSingleModal
-      {data}
-      show={$EditStore.show}
-      on:cancel={clearEditstore}
-      on:save={(e) => handleSave(e.detail)}
-    /> -->
-    <!-- <EditImageModal
-      {data}
-      show={$EditStore.show}
-      aspectRatioSquare={true}
-      resizeCroppedImage={true}
-      on:cancel={clearEditstore}
-      on:crop={(e) => handleCrop(e.detail)}
-    /> -->
   {/if}
 
   <div class="container">
