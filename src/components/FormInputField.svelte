@@ -99,7 +99,7 @@
   }
 
   label {
-    color: #b9b9b9;
+    color: #666666;
   }
 
   input:focus + label {
