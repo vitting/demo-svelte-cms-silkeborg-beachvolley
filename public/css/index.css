@@ -76,10 +76,34 @@ button.btn {
   border-radius: var(--border-radius);
   border: none;
   outline-color: var(--button-outline-color);
-  /* height: 32px; */
+  font-size: 1.1rem; 
 }
 
 button.btn[disabled] {
   background-color: var(--button-disabled-bgcolor);
   color: var(--button-disabled-color);
+}
+
+.input {
+  font-size: 1.2rem; 
+  border: none;
+  border-bottom: 1px solid #b9b9b9;
+  outline: none;
+  width: 100%;
+}
+
+input:focus {
+  border-bottom: 1px solid #36454f;
+}
+
+.label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.input-error {
+  margin: 0.3rem 0;
+  font-size: 0.8rem;
+  color: #dc143c;
 }

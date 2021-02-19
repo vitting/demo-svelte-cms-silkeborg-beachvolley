@@ -15,9 +15,5 @@
 
   .input {
     font-size: var(--text-size-h1);
-    border: none;
-    border-bottom: 1px solid black;
-    outline: none;
-    width: 100%;
   }
 </style>

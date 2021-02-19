@@ -1,6 +1,4 @@
 <script lang="typescript">
-  import Router from "svelte-spa-router";
-  import routes from "./routes/router";
   import EditStore from "./stores/edit.store";
   import EditSingleModal from "./components/EditSingleModal.svelte";
   import EditEditorModal from "./components/EditEditorModal.svelte";
@@ -12,7 +10,9 @@
   import LoadingSpinnerStore from "./stores/loading-spinner.store";
   import Cropper from "cropperjs";
   import ImageService from "./services/image.service";
-
+  import {Route, router} from 'tinro'; 
+  import Home from "./views/Home.svelte";
+  import Login from "./views/Login.svelte";
   const data: EditData = {
     elementId: "",
     sectionId: "",
@@ -26,7 +26,13 @@
     const doc = domparser.parseFromString(data.html!, "text/html");
     const images = doc.querySelectorAll("img");
     LoadingSpinnerStore.set(true);
+    
     for (const image of images) {
+      // Remove style attrb if it exists. 
+      // If we save in editor with a image selected it has a curser resize 
+      image.removeAttribute("style");
+      
+      // Rezise image to a max-width
       let resize_to = image.width;
       if (image.width === 0 || image.width > 500) {
         resize_to = 500;
@@ -89,7 +95,8 @@
   <div class="container">
     <div class="bgimage" />
     <div class="content">
-      <Router {routes} />
+      <Route path="/"><Home></Home></Route>
+      <Route path="/login"><Login></Login></Route>
     </div>
   </div>
 </div>
@@ -117,7 +124,10 @@
   }
 
   .content {
+    position: relative;
     padding: 0 1rem;
+    /* background-color: #fff; */
+    /* height: 100%; */
   }
 
   @media only screen and (max-width: 612px) {
