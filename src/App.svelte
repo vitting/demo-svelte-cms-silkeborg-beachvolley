@@ -8,11 +8,13 @@
   import StorageService from "./services/storeage.service";
   import SpinnerLoader from "./components/SpinnerLoader.svelte";
   import LoadingSpinnerStore from "./stores/loading-spinner.store";
-  import Cropper from "cropperjs";
   import ImageService from "./services/image.service";
   import {Route, router} from 'tinro'; 
   import Home from "./views/Home.svelte";
   import Login from "./views/Login.svelte";
+import { onMount } from "svelte";
+import AuthService from "./services/auth.service";
+import AuthStore from "./stores/auth.store";
   const data: EditData = {
     elementId: "",
     sectionId: "",
@@ -76,6 +78,14 @@
       data: { elementId: "", sectionId: "" },
     });
   }
+
+  onMount(async () => {
+    const user = await AuthService.getUserInit();
+    if (!user) {
+      router.goto("/login");
+    }
+    
+  });  
 </script>
 
 <div class="App">
@@ -126,8 +136,6 @@
   .content {
     position: relative;
     padding: 0 1rem;
-    /* background-color: #fff; */
-    /* height: 100%; */
   }
 
   @media only screen and (max-width: 612px) {

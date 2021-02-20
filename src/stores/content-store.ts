@@ -23,6 +23,3 @@ export function getPageData() {
     return store;
 }
 
-// const ContentStore = writable<Content[]>([]);
-
-// export default ContentStore;

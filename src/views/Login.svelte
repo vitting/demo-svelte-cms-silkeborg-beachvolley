@@ -21,12 +21,11 @@ let formValid = false;
   ];
 
   async function handleSubmit() {
-    // console.log(email);
-
-    // await AuthService.login(email, password);
+    await AuthService.login(emailData.value, passwordData.value);
   }
 
   $: {
+    formValid = false;
     if (emailData?.valid && passwordData?.valid) {
       formValid = true;
     }
@@ -42,7 +41,7 @@ let formValid = false;
       <FormInputField
         bind:value={email}
         type={"email"}
-        label={"E-mail:"}
+        label={"E-mail"}
         validators={emailValidators}
         required={true}
         bind:data={emailData}
@@ -51,7 +50,7 @@ let formValid = false;
       <FormInputField
         bind:value={password}
         type={"password"}
-        label={"Password:"}
+        label={"Password"}
         validators={passwordValidators}
         required={true}
         bind:data={passwordData}

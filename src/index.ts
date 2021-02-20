@@ -1,4 +1,5 @@
 import App from "./App.svelte";
+import AuthService from "./services/auth.service";
 
 var app = new App({
   target: document.body,

@@ -20,6 +20,7 @@
   let showError = false;
   let errorMessage = "";
   let touched = false;
+  let inputEl: HTMLInputElement;
   export let id = "";
 
   function validate(node: HTMLInputElement, value: string) {
@@ -50,17 +51,29 @@
     value = el.value.trim();
   }
 
+  function setTouched() {
+    inputEl.classList.remove("untouched");
+    inputEl.classList.add("touched");
+  }
+
   onMount(() => {
     if (value) {
       initialValue = value;
+      touched = true;
       data.value = value;
-      data.touched = true;
+      data.touched = touched;
     }
 
     if (!id) {
       id = cuid();
     }
   });
+
+  $: {
+    if (touched) {
+      setTouched();
+    }
+  }
 </script>
 
 <div class="form-field">
@@ -69,10 +82,11 @@
       {id}
       name={id}
       {type}
-      class="input"
+      class="input untouched"
       value={initialValue}
       use:validate={value}
       on:input={(e) => handleValueChange(e)}
+      bind:this={inputEl}
       {required}
       {maxLength}
       {placeholder}
@@ -96,13 +110,30 @@
   .fields {
     display: flex;
     flex-direction: column-reverse;
+    position: relative;
+    height: 56px;
   }
 
   label {
-    color: #666666;
+    color: #868686;
+    position: absolute;
+    top: 0;
+    transition: all 0.5s;
+    -moz-user-select: none;
+    -webkit-user-select: none;
   }
 
-  input:focus + label {
+  input {
+    position: absolute;
+    bottom: 0;
+  }
+
+  input.untouched + label {
+    top: 26px;
+  }
+
+  input.untouched:focus + label {
     color: black;
+    top: 0;
   }
 </style>

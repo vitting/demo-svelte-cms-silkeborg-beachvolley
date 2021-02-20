@@ -135,7 +135,7 @@
     flex-direction: column;
     align-items: center;
     margin: 0 10px;
-    transition: transform 0.5s;
+    transition: transform 0.4s;
     outline-color: var(--button-outline-color);
   }
 

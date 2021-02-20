@@ -69,6 +69,10 @@ body {
   color: var(--text-color-theme1);
 }
 
+.hide {
+  display: none;
+}
+
 button.btn {
   background-color: var(--button-bgcolor);
   color: var(--button-color);
@@ -76,7 +80,7 @@ button.btn {
   border-radius: var(--border-radius);
   border: none;
   outline-color: var(--button-outline-color);
-  font-size: 1.1rem; 
+  font-size: 1rem; 
 }
 
 button.btn[disabled] {
@@ -87,7 +91,7 @@ button.btn[disabled] {
 .input {
   font-size: 1.2rem; 
   border: none;
-  border-bottom: 1px solid #666666;
+  border-bottom: 1px solid #868686;
   outline: none;
   width: 100%;
 }
