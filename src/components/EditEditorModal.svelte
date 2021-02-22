@@ -2,8 +2,7 @@
   import Modal from "./Modal.svelte";
   import EditEditor from "./EditEditor.svelte";
   import { createEventDispatcher } from "svelte";
-  import type { EditData } from "src/interfaces/edit-data";
-
+  import type { EditData } from "../interfaces/edit-data";
   export let show = false;
   export let data: EditData;
   export let positionX = 0;

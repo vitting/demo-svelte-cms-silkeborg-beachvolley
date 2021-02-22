@@ -9,53 +9,26 @@
   import SpinnerLoader from "./components/SpinnerLoader.svelte";
   import LoadingSpinnerStore from "./stores/loading-spinner.store";
   import ImageService from "./services/image.service";
-  import {Route, router} from 'tinro'; 
+  import { Route, router } from "tinro";
   import Home from "./views/Home.svelte";
   import Login from "./views/Login.svelte";
-import { onMount } from "svelte";
-import AuthService from "./services/auth.service";
-import AuthStore from "./stores/auth.store";
-  const data: EditData = {
-    elementId: "",
-    sectionId: "",
-    title: "Velkommen",
-    html:
-      "<h1>KOm si kom sa</h1><p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum id doloremqueut ad, magnam recusandae distinctio delectus quibusdam. Vitae id perspiciatis unde dolorem adipisci praesentium quisquam consequuntur, eveniet earum veniam? Iusto, vero assumenda ut aliquam quia, provident enim perferendis sit, odio voluptatem eaque dolorum et eum nam. Cupiditate culpa, non nisi velit ad nulla itaque, optio quae atque, debitis doloremque!</p>",
-  };
+  import { onMount } from "svelte";
+  import AuthService from "./services/auth.service";
+import { EditService } from "./services/edit.service";
 
-  async function handleSave(data: EditData) {
-    const domparser = new DOMParser();
-    const doc = domparser.parseFromString(data.html!, "text/html");
-    const images = doc.querySelectorAll("img");
+  async function handleSaveHtml(data: EditData) {
     LoadingSpinnerStore.set(true);
-    
-    for (const image of images) {
-      // Remove style attrb if it exists. 
-      // If we save in editor with a image selected it has a curser resize 
-      image.removeAttribute("style");
-      
-      // Rezise image to a max-width
-      let resize_to = image.width;
-      if (image.width === 0 || image.width > 500) {
-        resize_to = 500;
-      }
-
-      const data = await ImageService.resize(image, resize_to);
-      const uploadData = await ImageService.uploadImages(
-        data.dataWebp,
-        data.dataJpeg,
-        data.width,
-        data.height
-      );
-      image.src = uploadData.urlJpeg;
-    }
+    const html = EditService.prepareHtmlToSave(data);
     LoadingSpinnerStore.set(false);
 
-    console.log(doc.body.innerHTML);
+    console.log(html);
 
     clearEditstore();
   }
 
+  function handleSaveText(data: EditData) {
+    console.log(data);
+  }
   async function handleCrop(data: CroppedImageData) {
     const uploadData = await ImageService.uploadImages(
       data.dataWebp,
@@ -64,19 +37,11 @@ import AuthStore from "./stores/auth.store";
       data.height,
       data.filename
     );
-    console.log(uploadData);
-
     clearEditstore();
   }
 
   function clearEditstore() {
-    EditStore.set({
-      show: false,
-      type: "none",
-      clickX: 0,
-      clickY: 0,
-      data: { elementId: "", sectionId: "" },
-    });
+    EditService.clearEditStore();
   }
 
   onMount(async () => {
@@ -84,29 +49,47 @@ import AuthStore from "./stores/auth.store";
     if (!user) {
       router.goto("/login");
     }
-    
-  });  
+  });
 </script>
 
 <div class="App">
   {#if $LoadingSpinnerStore}
     <SpinnerLoader />
   {/if}
-  {#if $EditStore.show}
+  {#if $EditStore.show && $EditStore.type === "multi"}
     <EditEditorModal
-      {data}
+      data={$EditStore.data}
       show={$EditStore.show}
       positionY={$EditStore.clickY}
       on:cancel={clearEditstore}
-      on:save={(e) => handleSave(e.detail)}
+      on:save={(e) => handleSaveHtml(e.detail)}
     />
   {/if}
-
+  {#if $EditStore.show && $EditStore.type === "single"}
+    <EditSingleModal
+      data={$EditStore.data}
+      positionY={$EditStore.clickY}
+      show={$EditStore.show}
+      result={$EditStore.result}
+      on:cancel={clearEditstore}
+      on:save={(e) => handleSaveText(e.detail)}
+    />
+  {/if}
+  {#if $EditStore.show && $EditStore.type === "image"}
+    <EditImageModal
+      data={$EditStore.data}
+      positionY={$EditStore.clickY}
+      show={$EditStore.show}
+      aspectRatioSquare={true}
+      on:cancel={clearEditstore}
+      on:crop={(e) => handleCrop(e.detail)}
+    />
+  {/if}
   <div class="container">
     <div class="bgimage" />
     <div class="content">
-      <Route path="/"><Home></Home></Route>
-      <Route path="/login"><Login></Login></Route>
+      <Route path="/"><Home /></Route>
+      <Route path="/login"><Login /></Route>
     </div>
   </div>
 </div>

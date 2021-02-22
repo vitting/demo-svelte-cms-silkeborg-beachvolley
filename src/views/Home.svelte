@@ -8,7 +8,7 @@
 
 <div>
   {#await $content}
-    <div></div>
+    <div />
   {:then data}
     <div class="page">
       <TopBar />

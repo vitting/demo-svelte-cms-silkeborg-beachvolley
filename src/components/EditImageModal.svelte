@@ -131,7 +131,7 @@
 </script>
 
 <div>
-  <Modal {show} title="Image">
+  <Modal {show} title="Image" {positionY}>
     <div class="container">
       {#if imageLoaded}
         <div class="image-container">

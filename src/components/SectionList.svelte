@@ -4,18 +4,21 @@
   import SectionListItem from "./SectionListItem.svelte";
   export let theme: number = 0; // Theme 1 = standard
   export let items: ContentItem[] = [];
+  export let editMode = false;
 </script>
 
 {#if items}
   <div>
     <div class="s-list-editbar">
       <div>
-        <EditBar add={true} showtext={true} config={{addText: "Add new block"}} />
+        <EditBar role={"toolbar"} show={editMode} add={true} showtext={true} config={{addText: "Add new block"}} />
       </div>
     </div>
     <div class="s-info-list">
       {#each items as item}
-        <SectionListItem {theme} {item} />
+        <div>
+          <SectionListItem {editMode} {theme} {item} />
+        </div>
       {/each}
     </div>
   </div>

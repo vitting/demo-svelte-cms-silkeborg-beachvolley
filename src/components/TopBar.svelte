@@ -15,6 +15,10 @@
       navWrapperEl.style.display = "block";
     }
   }
+
+  function handleLogout() {
+    
+  }
 </script>
 
 <header class="top">
@@ -45,6 +49,8 @@
         <li><a href="">Kontakt</a></li>
         <li><a href="">Bliv medlem</a></li>
         <li><a href="">Bestyrelsen</a></li>
+        <!-- svelte-ignore a11y-missing-attribute -->
+        <li><a href="" on:click|preventDefault={handleLogout}>Log ud</a></li>
       </ul>
     </nav>
   </div>

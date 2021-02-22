@@ -7,20 +7,29 @@
   import EditBar from "./EditBar.svelte";
   import EditStore from "../stores/edit.store";
   import type { EditbarAction } from "../interfaces/editbar-action";
+import { EditService } from "../services/edit.service";
 
   export let theme: number = 0; // Theme 0 = standard
   export let data: ContentSection;
   export let index: number = 0;
+  let editMode = false;
+  let sectionId = "";
+  onMount(() => {
+    if (data) {
+      sectionId = data.id; 
+    }
+  });
 
-  onMount(() => {});
+  async function handleEditTitle(action: EditbarAction) {
+    const result2 = await EditService.editTitle(action, data.id, data.title)
+    console.log("result2", result2);
+    
+  }
 
-  function handleAction(action: EditbarAction) {
-    EditStore.set({
-      ...$EditStore,
-      show: true,
-      clickX: action.clickX,
-      clickY: action.clickY,
-    });
+  function handleSectionEdit(action: EditbarAction) {
+    if (action.action === "edit") {
+      editMode = !editMode;
+    }
   }
 
   $: theme = index % 2;
@@ -28,28 +37,37 @@
 
 {#if data}
   <section
-    id="home"
+    id={data.id}
     class="section"
     class:theme-1={theme === 0}
     class:theme-2={theme === 1}
   >
     <div class="edit-section-container">
       <EditBar
+        role={"toolbar"}
+        show={true}
         edit={true}
         add={true}
+        remove={true}
         showtext={true}
-        config={{ editText: "Edit section", addText: "Add section" }}
+        config={{
+          editText: "Edit section",
+          addText: "Add section",
+          removeText: "Delete Section",
+        }}
+        on:action={(e) => handleSectionEdit(e.detail)}
       />
     </div>
     <div class="s-container-title">
       <div class="s-editbar">
-        <EditBar edit={true} on:action={(e) => handleAction(e.detail)} />
+        <EditBar role={"title"} show={editMode} edit={true} on:action={(e) => handleEditTitle(e.detail)} />
       </div>
       <h1 class="s-title">{data.title}</h1>
     </div>
 
     <SectionIntro
-      sectionid={data.id}
+      {editMode}
+      sectionId={data.id}
       text={data.text}
       image={data.image}
       {theme}
@@ -58,17 +76,19 @@
     <div class="paragraph-list">
       <div class="paragraph-list-editbar">
         <EditBar
+          role={"toolbar"}
+          show={editMode}
           add={true}
           showtext={true}
           config={{ addText: "Add new paragraph" }}
         />
       </div>
       {#each data.paragraphs as pragraph (pragraph.id)}
-        <SectionParagraph data={pragraph} />
+        <SectionParagraph {editMode} data={pragraph} />
       {/each}
     </div>
 
-    <SectionList {theme} items={data.items} />
+    <SectionList {editMode} {theme} items={data.items} />
   </section>
 {/if}
 

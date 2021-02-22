@@ -1,8 +1,11 @@
+import type { EditRole } from "./edit-role";
+
 export interface EditData {
-    title?: string;
+    text?: string;
     sectionId: string;
     elementId: string;
     html?: string;
     image?: string;
+    role: EditRole
 }
 

@@ -1,22 +1,26 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import type { EditbarAction } from "../interfaces/editbar-action";
+
   import EditBar from "./EditBar.svelte";
-  export let sectionid: string;
+  import EditStore from "../stores/edit.store";
+import { EditService } from "../services/edit.service";
+  export let sectionId: string;
   export let theme: number = 0; // Theme 0 = standard
   export let text: string = "";
   export let image: string;
+  export let editMode = false;
 
-  let desceditorId: string = "";
-  function handleActionDesc(action: string) {
-    if (text) {
-    }
+  function handleActionDesc(action: EditbarAction) {
+    EditService.editSectionDescription(action, sectionId, text);
   }
 
-  function handleActionImage(action: string) {}
+  function handleActionImage(action: EditbarAction) {
+    EditService.editSectionImage(action, sectionId);
+  }
 
   $: imageUrl = image;
-  $: descEditId = `desc-${sectionid}`;
-  $: imageEditId = `image-${sectionid}`;
+  $: descEditId = `desc-${sectionId}`;
+  $: imageEditId = `image-${sectionId}`;
 </script>
 
 <div
@@ -26,6 +30,8 @@
 >
   <div class="s-container">
     <EditBar
+      role={"introText"}
+      show={editMode}
       showtext={false}
       edit={true}
       on:action={(e) => handleActionDesc(e.detail)}
@@ -36,6 +42,8 @@
   </div>
   <div class="s-container">
     <EditBar
+      role={"introImage"}
+      show={editMode}
       showtext={false}
       edit={true}
       on:action={(e) => handleActionImage(e.detail)}

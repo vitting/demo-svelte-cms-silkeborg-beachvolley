@@ -1,4 +1,4 @@
-import type { EditMode } from "src/interfaces/editmode";
+import type { EditMode } from "../interfaces/editmode";
 import { writable } from "svelte/store";
 
 const EditStore = writable<EditMode>({
@@ -6,7 +6,13 @@ const EditStore = writable<EditMode>({
     type: "none",
     clickX: 0,
     clickY: 0,
-    data: null
+    data: {
+        elementId: "",
+        sectionId: "",
+        role: "none"
+    },
+    role: "none",
+    result: null
 });
 
 export default EditStore;

@@ -3,6 +3,7 @@
   import EditBar from "./EditBar.svelte";
   export let theme: number = 0; // Theme 0 = standard
   export let item: ContentItem;
+  export let editMode = false;
 </script>
 
 {#if item}
@@ -11,7 +12,7 @@
     class:theme-1={theme === 0}
     class:theme-2={theme === 1}
   >
-  <EditBar edit={true} />
+  <EditBar role={"block"} show={editMode} edit={true} remove={true} move={true} />
     <h2 class="s-info-title">
       {item.title}
     </h2>

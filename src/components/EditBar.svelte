@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { fade } from "svelte/transition";
+
   import { createEventDispatcher } from "svelte";
   import {
     mdiPencil,
@@ -11,7 +13,8 @@
   import Icon from "./Icon.svelte";
   import type { EditBarConfig } from "../interfaces/editbar-config";
   import type { EditbarAction } from "../interfaces/editbar-action";
-
+  import type { EditRole } from "../interfaces/edit-role";
+  export let show = false;
   export let edit = false;
   export let exit = false;
   export let save = false;
@@ -26,6 +29,7 @@
     removeText: "Delete",
     saveText: "Save",
   };
+  export let role: EditRole = "none";
 
   export let showtext = false;
   const dispatch = createEventDispatcher();
@@ -35,86 +39,89 @@
       action,
       clickX: e.pageX,
       clickY: e.pageY,
+      role,
     };
     dispatch("action", editbarAction);
   }
 </script>
 
-<div class="edit-section-main">
-  <div
-    class="edit-section"
-    class:showtext={showtext === false}
-    title="edit page"
-  >
-    {#if edit}
-      <button
-        type="button"
-        class="edit-button"
-        title={config.editText}
-        on:click={(e) => handleClick(e, "edit")}
-      >
-        <Icon path={mdiPencil} class="edit-icon" />
-        <span class="edit-button-text">{config.editText}</span>
-      </button>
-    {/if}
-    {#if exit}
-      <button
-        type="button"
-        class="edit-button"
-        title={config.exitText}
-        on:click={(e) => handleClick(e, "exit")}
-      >
-        <Icon path={mdiCloseThick} class="edit-icon" />
-        <span class="edit-button-text">{config.exitText}</span>
-      </button>
-    {/if}
-    {#if save}
-      <button
-        type="button"
-        class="edit-button"
-        title={config.saveText}
-        on:click={(e) => handleClick(e, "save")}
-      >
-        <Icon path={mdiContentSaveEdit} class="edit-icon" />
-        <span class="edit-button-text">{config.saveText}</span>
-      </button>
-    {/if}
+{#if show}
+  <div class="edit-section-main" transition:fade={{ duration: 300 }}>
+    <div
+      class="edit-section"
+      class:showtext={showtext === false}
+      title="edit page"
+    >
+      {#if edit}
+        <button
+          type="button"
+          class="edit-button"
+          title={config.editText}
+          on:click={(e) => handleClick(e, "edit")}
+        >
+          <Icon path={mdiPencil} class="edit-icon" />
+          <span class="edit-button-text">{config.editText}</span>
+        </button>
+      {/if}
+      {#if exit}
+        <button
+          type="button"
+          class="edit-button"
+          title={config.exitText}
+          on:click={(e) => handleClick(e, "exit")}
+        >
+          <Icon path={mdiCloseThick} class="edit-icon" />
+          <span class="edit-button-text">{config.exitText}</span>
+        </button>
+      {/if}
+      {#if save}
+        <button
+          type="button"
+          class="edit-button"
+          title={config.saveText}
+          on:click={(e) => handleClick(e, "save")}
+        >
+          <Icon path={mdiContentSaveEdit} class="edit-icon" />
+          <span class="edit-button-text">{config.saveText}</span>
+        </button>
+      {/if}
 
-    {#if add}
-      <button
-        type="button"
-        class="edit-button"
-        title={config.addText}
-        on:click={(e) => handleClick(e, "add")}
-      >
-        <Icon path={mdiPlusThick} class="edit-icon" />
-        <span class="edit-button-text">{config.addText}</span>
-      </button>
-    {/if}
-    {#if remove}
-      <button
-        type="button"
-        class="edit-button"
-        title={config.removeText}
-        on:click={(e) => handleClick(e, "delete")}
-      >
-        <Icon path={mdiDelete} class="edit-icon" />
-        <span class="edit-button-text">{config.removeText}</span>
-      </button>
-    {/if}
-    {#if move}
-      <button
-        type="button"
-        class="edit-button"
-        title={config.moveText}
-        on:click={(e) => handleClick(e, "move")}
-      >
-        <Icon path={mdiArrowUpDown} class="edit-icon" />
-        <span class="edit-button-text">{config.moveText}</span>
-      </button>
-    {/if}
+      {#if add}
+        <button
+          type="button"
+          class="edit-button"
+          title={config.addText}
+          on:click={(e) => handleClick(e, "add")}
+        >
+          <Icon path={mdiPlusThick} class="edit-icon" />
+          <span class="edit-button-text">{config.addText}</span>
+        </button>
+      {/if}
+      {#if remove}
+        <button
+          type="button"
+          class="edit-button"
+          title={config.removeText}
+          on:click={(e) => handleClick(e, "delete")}
+        >
+          <Icon path={mdiDelete} class="edit-icon" />
+          <span class="edit-button-text">{config.removeText}</span>
+        </button>
+      {/if}
+      {#if move}
+        <button
+          type="button"
+          class="edit-button"
+          title={config.moveText}
+          on:click={(e) => handleClick(e, "move")}
+        >
+          <Icon path={mdiArrowUpDown} class="edit-icon" />
+          <span class="edit-button-text">{config.moveText}</span>
+        </button>
+      {/if}
+    </div>
   </div>
-</div>
+{/if}
 
 <style>
   :global(.edit-section button .edit-icon) {

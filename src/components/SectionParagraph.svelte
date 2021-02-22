@@ -2,12 +2,13 @@
   import type { ContentParagraph } from "src/interfaces/content-paragraph";
   import EditBar from "./EditBar.svelte";
   export let data: ContentParagraph;
+  export let editMode = false;
 </script>
 
 {#if data}
   
   <div class="s-paragraph-container">
-    <div class="s-editbar"><EditBar move={true} edit={true} remove={true} ></EditBar></div>
+    <div class="s-editbar"><EditBar role={"paragraph"} show={editMode} move={true} edit={true} remove={true} ></EditBar></div>
   <p class="s-paragraph">
     
     Lorem, ipsum dolor sit amet consectetur adipisicing elit. Placeat mollitia
