@@ -1,20 +1,20 @@
 <script lang="ts">
   import "cropperjs/dist/cropper.css";
   import Cropper from "cropperjs";
-  import { createEventDispatcher } from "svelte";
   import UploadImageButton from "./UploadImageButton.svelte";
   import Modal from "./Modal.svelte";
-  import type { CroppedImageData } from "src/interfaces/cropped-image-data";
-  import type { EditData } from "../interfaces/edit-data";
+  import type { ImageData } from "../interfaces/image-data";
   import LoadingSpinnerStore from "../stores/loading-spinner.store";
-  export let show = true;
-  export let aspectRatioSquare = false;
-  export let data: EditData;
-  export let resizeCroppedImage = false;
-  export let resizeWidth = 500;
-  export let resizeHeight = 500;
-  export let positionX = 0;
-  export let positionY = 0;
+  import { onDestroy, onMount } from "svelte";
+  import EditImageModalStore from "../stores/edit-image-modal.store";
+  import type { EditImageResultCallback } from "../interfaces/edit-image-result-callback";
+  let show = true;
+  let value: string;
+  let aspectRatioSquare = false;
+  let resizeCroppedImage = false;
+  let resizeWidth = 500;
+  let resizeHeight = 500;
+  let positionY = 0;
   let cropper: Cropper;
   let imageEl: HTMLImageElement;
   let imageLoaded = false;
@@ -22,8 +22,8 @@
   let cropWidthInfo = 0;
   let cropHeightInfo = 0;
   let filename = "";
-  const dispatch = createEventDispatcher();
-
+  let unsubStore: () => void;
+  let resultCallback: EditImageResultCallback | null;
   function destroyCropperIfExists() {
     if (cropper) {
       cropper.destroy();
@@ -55,7 +55,10 @@
   }
 
   function handleCancel() {
-    dispatch("cancel");
+    show = false;
+    if (resultCallback) {
+      resultCallback(null);
+    }
   }
 
   function handleCropImage() {
@@ -78,19 +81,18 @@
 
     const imageDataJpg = canvas.toDataURL("image/jpeg", 0.75);
     const imageDataWebp = canvas.toDataURL("image/webp", 0.75);
-    console.log(imageDataJpg.length, imageDataWebp.length);
 
-    const croppedImageData: CroppedImageData = {
+    const imageData: ImageData = {
       width,
       height,
       filename,
       dataJpeg: imageDataJpg,
       dataWebp: imageDataWebp,
-      elementId: data.elementId,
-      sectionId: data.sectionId,
     };
-
-    dispatch("crop", croppedImageData);
+    show = false;
+    if (resultCallback) {
+      resultCallback(imageData);
+    }
   }
 
   async function handleFile(files: FileList) {
@@ -127,6 +129,23 @@
     });
   }
 
+  onMount(() => {
+    unsubStore = EditImageModalStore.subscribe((data) => {
+      value = data.data;
+      positionY = data.positionY;
+      show = data.show;
+      aspectRatioSquare = data.aspectRatioSquare;
+      resizeCroppedImage = data.resizeCroppedImage;
+      resizeHeight = data.resizeHeight;
+      resizeWidth = data.resizeWidth;
+      resultCallback = data.result;
+    });
+  });
+
+  onDestroy(() => {
+    unsubStore();
+  });
+
   $: infoText = `W: ${cropWidthInfo} / H: ${cropHeightInfo}`;
 </script>
 
@@ -151,8 +170,10 @@
       <button class="btn" on:click={handleCropImage} disabled={!cropReady}
         >Crop</button
       >
-      <button clasS="btn" on:click={handleCancel} disabled={$LoadingSpinnerStore}
-        >Cancel</button
+      <button
+        clasS="btn"
+        on:click={handleCancel}
+        disabled={$LoadingSpinnerStore}>Cancel</button
       >
     </div>
   </Modal>

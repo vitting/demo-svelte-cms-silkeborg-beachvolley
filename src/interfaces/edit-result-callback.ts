@@ -1,0 +1,1 @@
+export type EditResultCallback = (value: string | null) => void;

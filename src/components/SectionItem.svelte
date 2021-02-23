@@ -7,7 +7,8 @@
   import EditBar from "./EditBar.svelte";
   import EditStore from "../stores/edit.store";
   import type { EditbarAction } from "../interfaces/editbar-action";
-import { EditService } from "../services/edit.service";
+  import { EditService } from "../services/edit.service";
+  import EditSingleModalStore from "../stores/edit-single-modal.store";
 
   export let theme: number = 0; // Theme 0 = standard
   export let data: ContentSection;
@@ -16,13 +17,13 @@ import { EditService } from "../services/edit.service";
   let sectionId = "";
   onMount(() => {
     if (data) {
-      sectionId = data.id; 
+      sectionId = data.id;
     }
   });
 
   async function handleEditTitle(action: EditbarAction) {
-    const result2 = await EditService.editTitle(action, data.id, data.title)
-    console.log("result2", result2);
+    const r = await EditService.editSingleModal(action, data.title);
+    console.log(r);
     
   }
 
@@ -60,7 +61,12 @@ import { EditService } from "../services/edit.service";
     </div>
     <div class="s-container-title">
       <div class="s-editbar">
-        <EditBar role={"title"} show={editMode} edit={true} on:action={(e) => handleEditTitle(e.detail)} />
+        <EditBar
+          role={"title"}
+          show={editMode}
+          edit={true}
+          on:action={(e) => handleEditTitle(e.detail)}
+        />
       </div>
       <h1 class="s-title">{data.title}</h1>
     </div>

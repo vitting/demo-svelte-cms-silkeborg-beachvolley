@@ -1,15 +1,17 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { afterUpdate, onMount } from "svelte";
 
   import { fade } from "svelte/transition";
   import Backdrop from "./Backdrop.svelte";
   export let show = false;
   export let title = "";
-  export let positionX = 0;
   export let positionY = 0;
   let modalEl: HTMLDivElement;
+  let testEl: HTMLDivElement;
   let windowInnerWidth = 0;
   let move = false;
+  let moved = false;
+  let scrollY = 0;
   function handleClose() {
     show = false;
   }
@@ -28,6 +30,7 @@
     modalEl.style.opacity = "1";
     modalEl.style.cursor = "default";
     move = false;
+    moved = true;
   }
 
   function handleMouseMove(e: MouseEvent) {
@@ -44,13 +47,23 @@
   }
 
   onMount(() => {
-    modalEl.style.top = positionY - 100 + "px";
+    modalEl.style.top = (scrollY + 50) + "px";
+    // modalEl.style.top = positionY - 100 + "px";
   });
+
+  $: {
+    if (modalEl && !move && !moved) {
+      modalEl.style.top = (scrollY + 50) + "px";
+    }
+    
+  };
+  
 </script>
 
 <svelte:window
   on:mousemove={handleMouseMove}
   bind:innerWidth={windowInnerWidth}
+  bind:scrollY={scrollY}
 />
 
 {#if show}

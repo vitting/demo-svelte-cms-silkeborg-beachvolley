@@ -1,8 +1,11 @@
-import type { EditMode, EditResultCallback } from "../interfaces/editmode";
 import type { EditbarAction } from "../interfaces/editbar-action";
 import EditStore from "../stores/edit.store";
 import type { EditData } from "../interfaces/edit-data";
 import ImageService from "./image.service";
+import EditSingleModalStore from "../stores/edit-single-modal.store";
+import EditEditorModalStore from "../stores/edit-editor-modal.store";
+import EditImageModalStore from "../stores/edit-image-modal.store";
+import type { ImageData } from "../interfaces/image-data";
 
 export class EditService {
   static clearEditStore() {
@@ -17,45 +20,64 @@ export class EditService {
         role: "none",
       },
       role: "none",
-      result: null
+      result: null,
     });
   }
 
-  static editSectionImage(action: EditbarAction, sectionId: string) {
-    const editMode: EditMode = {
-      show: true,
-      type: "image",
-      clickX: action.clickX,
-      clickY: action.clickY,
-      role: action.role,
-      data: {
-        sectionId,
-        elementId: "",
-        role: action.role,
-      },
-      result: null
-    };
-    EditStore.set(editMode);
+  static editImageModal(
+    action: EditbarAction,
+    data: string = "",
+    aspectRatioSquare = false,
+    resizeCroppedImage = false,
+    resizeWidth = 500,
+    resizeHeight = 500
+  ) {
+    return new Promise<ImageData | null>((resolve, reject) => {
+      try {
+        EditImageModalStore.set({
+          positionY: action.clickY,
+          show: true,
+          aspectRatioSquare,
+          resizeCroppedImage,
+          resizeHeight,
+          resizeWidth,
+          result: (value: ImageData | null) => resolve(value),
+          data: data,
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
   }
 
-  static editTitle(action: EditbarAction, sectionId: string, text: string) {
-    return new Promise((resolve, reject) => {
-      EditStore.set({
-        show: true,
-        type: "single",
-        clickX: action.clickX,
-        clickY: action.clickY,
-        role: action.role,
-        data: {
-          sectionId,
-          elementId: "",
-          text,
-          role: action.role,
-        },
-        result: (value: string) => resolve(value)
-      });
+  static editEditorModal(action: EditbarAction, text: string) {
+    return new Promise<string | null>((resolve, reject) => {
+      try {
+        EditEditorModalStore.set({
+          positionY: action.clickY,
+          show: true,
+          result: (value: string | null) => resolve(value),
+          data: text,
+        });
+      } catch (error) {
+        reject(error);
+      }
     });
-    
+  }
+
+  static editSingleModal(action: EditbarAction, text: string) {
+    return new Promise<string | null>((resolve, reject) => {
+      try {
+        EditSingleModalStore.set({
+          positionY: action.clickY,
+          show: true,
+          result: (value: string | null) => resolve(value),
+          data: text,
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
   }
 
   static editSectionDescription(
@@ -75,7 +97,7 @@ export class EditService {
         html: text,
         role: action.role,
       },
-      result: null
+      result: null,
     });
   }
 

@@ -1,7 +1,5 @@
 <script lang="ts">
   export let value: string;
-  export let positionX = 0;
-  export let positionY = 0;
 </script>
 
 <div class="editor">

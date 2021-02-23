@@ -4,7 +4,7 @@
   import EditEditorModal from "./components/EditEditorModal.svelte";
   import EditImageModal from "./components/EditImageModal.svelte";
   import type { EditData } from "./interfaces/edit-data";
-  import type { CroppedImageData } from "./interfaces/cropped-image-data";
+  import type { ImageData } from "./interfaces/image-data";
   import StorageService from "./services/storeage.service";
   import SpinnerLoader from "./components/SpinnerLoader.svelte";
   import LoadingSpinnerStore from "./stores/loading-spinner.store";
@@ -14,7 +14,7 @@
   import Login from "./views/Login.svelte";
   import { onMount } from "svelte";
   import AuthService from "./services/auth.service";
-import { EditService } from "./services/edit.service";
+  import { EditService } from "./services/edit.service";
 
   async function handleSaveHtml(data: EditData) {
     LoadingSpinnerStore.set(true);
@@ -29,7 +29,7 @@ import { EditService } from "./services/edit.service";
   function handleSaveText(data: EditData) {
     console.log(data);
   }
-  async function handleCrop(data: CroppedImageData) {
+  async function handleCrop(data: ImageData) {
     const uploadData = await ImageService.uploadImages(
       data.dataWebp,
       data.dataJpeg,
@@ -56,35 +56,9 @@ import { EditService } from "./services/edit.service";
   {#if $LoadingSpinnerStore}
     <SpinnerLoader />
   {/if}
-  {#if $EditStore.show && $EditStore.type === "multi"}
-    <EditEditorModal
-      data={$EditStore.data}
-      show={$EditStore.show}
-      positionY={$EditStore.clickY}
-      on:cancel={clearEditstore}
-      on:save={(e) => handleSaveHtml(e.detail)}
-    />
-  {/if}
-  {#if $EditStore.show && $EditStore.type === "single"}
-    <EditSingleModal
-      data={$EditStore.data}
-      positionY={$EditStore.clickY}
-      show={$EditStore.show}
-      result={$EditStore.result}
-      on:cancel={clearEditstore}
-      on:save={(e) => handleSaveText(e.detail)}
-    />
-  {/if}
-  {#if $EditStore.show && $EditStore.type === "image"}
-    <EditImageModal
-      data={$EditStore.data}
-      positionY={$EditStore.clickY}
-      show={$EditStore.show}
-      aspectRatioSquare={true}
-      on:cancel={clearEditstore}
-      on:crop={(e) => handleCrop(e.detail)}
-    />
-  {/if}
+  <EditSingleModal />
+  <EditEditorModal />
+  <EditImageModal />
   <div class="container">
     <div class="bgimage" />
     <div class="content">

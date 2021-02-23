@@ -2,20 +2,22 @@
   import type { EditbarAction } from "../interfaces/editbar-action";
 
   import EditBar from "./EditBar.svelte";
-  import EditStore from "../stores/edit.store";
-import { EditService } from "../services/edit.service";
+  import { EditService } from "../services/edit.service";
   export let sectionId: string;
   export let theme: number = 0; // Theme 0 = standard
   export let text: string = "";
   export let image: string;
   export let editMode = false;
 
-  function handleActionDesc(action: EditbarAction) {
-    EditService.editSectionDescription(action, sectionId, text);
+  async function handleActionDesc(action: EditbarAction) {
+    const r = await EditService.editEditorModal(action, text);
+    console.log(r);
   }
 
-  function handleActionImage(action: EditbarAction) {
-    EditService.editSectionImage(action, sectionId);
+  async function handleActionImage(action: EditbarAction) {
+    const r = await EditService.editImageModal(action, "", true);
+    console.log(r);
+    
   }
 
   $: imageUrl = image;
@@ -30,7 +32,6 @@ import { EditService } from "../services/edit.service";
 >
   <div class="s-container">
     <EditBar
-      role={"introText"}
       show={editMode}
       showtext={false}
       edit={true}
@@ -42,7 +43,6 @@ import { EditService } from "../services/edit.service";
   </div>
   <div class="s-container">
     <EditBar
-      role={"introImage"}
       show={editMode}
       showtext={false}
       edit={true}
