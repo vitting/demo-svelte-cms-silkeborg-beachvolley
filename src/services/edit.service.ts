@@ -1,5 +1,4 @@
 import type { EditbarAction } from "../interfaces/editbar-action";
-import EditStore from "../stores/edit.store";
 import type { EditData } from "../interfaces/edit-data";
 import ImageService from "./image.service";
 import EditSingleModalStore from "../stores/edit-single-modal.store";
@@ -8,22 +7,6 @@ import EditImageModalStore from "../stores/edit-image-modal.store";
 import type { ImageData } from "../interfaces/image-data";
 
 export class EditService {
-  static clearEditStore() {
-    EditStore.set({
-      show: false,
-      type: "none",
-      clickX: 0,
-      clickY: 0,
-      data: {
-        elementId: "",
-        sectionId: "",
-        role: "none",
-      },
-      role: "none",
-      result: null,
-    });
-  }
-
   static editImageModal(
     action: EditbarAction,
     data: string = "",
@@ -77,27 +60,6 @@ export class EditService {
       } catch (error) {
         reject(error);
       }
-    });
-  }
-
-  static editSectionDescription(
-    action: EditbarAction,
-    sectionId: string,
-    text: string
-  ) {
-    EditStore.set({
-      show: true,
-      type: "multi",
-      clickX: action.clickX,
-      clickY: action.clickY,
-      role: action.role,
-      data: {
-        sectionId,
-        elementId: "",
-        html: text,
-        role: action.role,
-      },
-      result: null,
     });
   }
 

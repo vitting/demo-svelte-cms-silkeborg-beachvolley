@@ -1,11 +1,9 @@
 <script lang="typescript">
-  import EditStore from "./stores/edit.store";
   import EditSingleModal from "./components/EditSingleModal.svelte";
   import EditEditorModal from "./components/EditEditorModal.svelte";
   import EditImageModal from "./components/EditImageModal.svelte";
   import type { EditData } from "./interfaces/edit-data";
   import type { ImageData } from "./interfaces/image-data";
-  import StorageService from "./services/storeage.service";
   import SpinnerLoader from "./components/SpinnerLoader.svelte";
   import LoadingSpinnerStore from "./stores/loading-spinner.store";
   import ImageService from "./services/image.service";
@@ -23,12 +21,9 @@
 
     console.log(html);
 
-    clearEditstore();
+    
   }
 
-  function handleSaveText(data: EditData) {
-    console.log(data);
-  }
   async function handleCrop(data: ImageData) {
     const uploadData = await ImageService.uploadImages(
       data.dataWebp,
@@ -37,11 +32,7 @@
       data.height,
       data.filename
     );
-    clearEditstore();
-  }
-
-  function clearEditstore() {
-    EditService.clearEditStore();
+    
   }
 
   onMount(async () => {
