@@ -6,7 +6,6 @@
   export let show = false;
   export let title = "";
   let modalEl: HTMLDivElement;
-  let testEl: HTMLDivElement;
   let windowInnerWidth = 0;
   let move = false;
   let moved = false;
@@ -33,7 +32,6 @@
   }
 
   function handleMouseMove(e: MouseEvent) {
-    e.preventDefault();
     if (move) {
       if (e.pageY > 0) {
         modalEl.style.top = e.pageY.toString() + "px";
