@@ -3,8 +3,7 @@
   import ImageResize from "quill-image-resizer-plugin";
   import { onMount } from "svelte";
 	import { createEventDispatcher } from 'svelte';
-  import E from 'wangeditor';
-
+  
   export let html: string;
   let value = "";
   let quill: Quill;
@@ -13,8 +12,6 @@
 
   onMount(() => {
     value = html;
-    // const editor = new E('#editor');
-    // editor.create();
     Quill.register("modules/imageResize", ImageResize);
     quill = new Quill("#editor", {
       modules: {
