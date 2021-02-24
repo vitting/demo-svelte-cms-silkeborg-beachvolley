@@ -6,14 +6,14 @@
   import type { EditResultCallback } from "../interfaces/edit-result-callback";
   let show = false;
   let value: string = "";
-  let positionY = 0;
+  let html: string = "";
   let resultCallback: EditResultCallback | null;
   let unsubStore: () => void;
 
   function handleSave() {
     show = false;
     if (resultCallback) {
-      resultCallback(value);
+      resultCallback(html);
     }
   }
 
@@ -24,10 +24,14 @@
     }
   }
 
+  function handleTextChange(data: string) {
+    html = data;
+  }
+
   onMount(() => {
     unsubStore = EditEditorModalStore.subscribe((data) => {
       value = data.data;
-      positionY = data.positionY;
+      html = value;
       show = data.show;
       resultCallback = data.result;
     });
@@ -40,8 +44,11 @@
 
 <div class="edit-editor-modal">
   {#if show}
-    <Modal {show} title="Edit" {positionY}>
-      <EditEditor html={value} bind:value />
+    <Modal {show} title="Edit">
+      <EditEditor
+        html={value}
+        on:textChange={(e) => handleTextChange(e.detail)}
+      />
       <div class="actions" slot="actions">
         <button class="btn" on:click={handleSave}>Save</button>
         <button clasS="btn" on:click={handleCancel}>Cancel</button>

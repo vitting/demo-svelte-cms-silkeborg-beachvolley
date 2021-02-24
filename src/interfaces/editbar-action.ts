@@ -1,8 +1,5 @@
-import type { EditRole } from "./edit-role"
-
 export type EditbarAction = {
-    action: string;
+    choice: string;
     clickX: number;
     clickY: number;
-    role: EditRole
 }

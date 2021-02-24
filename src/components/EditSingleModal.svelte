@@ -7,7 +7,6 @@
 
   let value: string = "";
   let show = false;
-  let positionY = 0;
   let resultCallback: EditResultCallback | null;
 
   let unsubStore: () => void;
@@ -28,7 +27,6 @@
   onMount(() => {
     unsubStore = EditSingleModalStore.subscribe((data) => {
       value = data.data;
-      positionY = data.positionY;
       show = data.show;
       resultCallback = data.result;
     });
@@ -41,7 +39,7 @@
 
 <div class="edit-single-modal">
   {#if show}
-    <Modal {show} title="Edit" {positionY}>
+    <Modal {show} title="Edit">
       <EditSingle bind:value />
       <div class="actions" slot="actions">
         <button class="btn" on:click={handleSave}>Save</button>

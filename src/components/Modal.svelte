@@ -1,11 +1,10 @@
 <script lang="ts">
-  import { afterUpdate, onMount } from "svelte";
+  import { onMount } from "svelte";
 
   import { fade } from "svelte/transition";
   import Backdrop from "./Backdrop.svelte";
   export let show = false;
   export let title = "";
-  export let positionY = 0;
   let modalEl: HTMLDivElement;
   let testEl: HTMLDivElement;
   let windowInnerWidth = 0;
@@ -48,16 +47,7 @@
 
   onMount(() => {
     modalEl.style.top = (scrollY + 50) + "px";
-    // modalEl.style.top = positionY - 100 + "px";
   });
-
-  $: {
-    if (modalEl && !move && !moved) {
-      modalEl.style.top = (scrollY + 50) + "px";
-    }
-    
-  };
-  
 </script>
 
 <svelte:window

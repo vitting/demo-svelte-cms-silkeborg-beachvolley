@@ -5,10 +5,8 @@
   import type { ContentSection } from "src/interfaces/content-section";
   import { onMount } from "svelte";
   import EditBar from "./EditBar.svelte";
-  import EditStore from "../stores/edit.store";
   import type { EditbarAction } from "../interfaces/editbar-action";
   import { EditService } from "../services/edit.service";
-  import EditSingleModalStore from "../stores/edit-single-modal.store";
 
   export let theme: number = 0; // Theme 0 = standard
   export let data: ContentSection;
@@ -28,7 +26,7 @@
   }
 
   function handleSectionEdit(action: EditbarAction) {
-    if (action.action === "edit") {
+    if (action.choice === "edit") {
       editMode = !editMode;
     }
   }
@@ -45,7 +43,6 @@
   >
     <div class="edit-section-container">
       <EditBar
-        role={"toolbar"}
         show={true}
         edit={true}
         add={true}
@@ -62,7 +59,6 @@
     <div class="s-container-title">
       <div class="s-editbar">
         <EditBar
-          role={"title"}
           show={editMode}
           edit={true}
           on:action={(e) => handleEditTitle(e.detail)}
@@ -82,7 +78,6 @@
     <div class="paragraph-list">
       <div class="paragraph-list-editbar">
         <EditBar
-          role={"toolbar"}
           show={editMode}
           add={true}
           showtext={true}

@@ -7,7 +7,6 @@ const EditImageModalStore = writable<EditModeImage>({
   resizeCroppedImage: false,
   resizeHeight: 500,
   resizeWidth: 500,
-  positionY: 0,
   data: "",
   result: null,
 });

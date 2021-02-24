@@ -8,7 +8,6 @@ import type { ImageData } from "../interfaces/image-data";
 
 export class EditService {
   static editImageModal(
-    action: EditbarAction,
     data: string = "",
     aspectRatioSquare = false,
     resizeCroppedImage = false,
@@ -18,7 +17,6 @@ export class EditService {
     return new Promise<ImageData | null>((resolve, reject) => {
       try {
         EditImageModalStore.set({
-          positionY: action.clickY,
           show: true,
           aspectRatioSquare,
           resizeCroppedImage,
@@ -37,7 +35,6 @@ export class EditService {
     return new Promise<string | null>((resolve, reject) => {
       try {
         EditEditorModalStore.set({
-          positionY: action.clickY,
           show: true,
           result: (value: string | null) => resolve(value),
           data: text,
@@ -52,7 +49,6 @@ export class EditService {
     return new Promise<string | null>((resolve, reject) => {
       try {
         EditSingleModalStore.set({
-          positionY: action.clickY,
           show: true,
           result: (value: string | null) => resolve(value),
           data: text,

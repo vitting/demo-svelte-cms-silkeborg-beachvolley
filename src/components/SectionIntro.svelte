@@ -15,7 +15,7 @@
   }
 
   async function handleActionImage(action: EditbarAction) {
-    const r = await EditService.editImageModal(action, "", true);
+    const r = await EditService.editImageModal("", true);
     console.log(r);
     
   }

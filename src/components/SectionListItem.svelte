@@ -12,7 +12,7 @@
     class:theme-1={theme === 0}
     class:theme-2={theme === 1}
   >
-  <EditBar role={"block"} show={editMode} edit={true} remove={true} move={true} />
+  <EditBar show={editMode} edit={true} remove={true} move={true} />
     <h2 class="s-info-title">
       {item.title}
     </h2>

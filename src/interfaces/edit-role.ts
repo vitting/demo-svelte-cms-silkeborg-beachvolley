@@ -1,1 +1,0 @@
-export type EditRole = "none" | "toolbar" | "title" | "introText" | "introImage" | "paragraph" | "block"

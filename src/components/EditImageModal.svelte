@@ -14,7 +14,6 @@
   let resizeCroppedImage = false;
   let resizeWidth = 500;
   let resizeHeight = 500;
-  let positionY = 0;
   let cropper: Cropper;
   let imageEl: HTMLImageElement;
   let imageLoaded = false;
@@ -132,7 +131,6 @@
   onMount(() => {
     unsubStore = EditImageModalStore.subscribe((data) => {
       value = data.data;
-      positionY = data.positionY;
       show = data.show;
       aspectRatioSquare = data.aspectRatioSquare;
       resizeCroppedImage = data.resizeCroppedImage;
@@ -150,7 +148,7 @@
 </script>
 
 <div>
-  <Modal {show} title="Image" {positionY}>
+  <Modal {show} title="Image">
     <div class="container">
       {#if imageLoaded}
         <div class="image-container">

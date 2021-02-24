@@ -11,7 +11,7 @@
   <div>
     <div class="s-list-editbar">
       <div>
-        <EditBar role={"toolbar"} show={editMode} add={true} showtext={true} config={{addText: "Add new block"}} />
+        <EditBar show={editMode} add={true} showtext={true} config={{addText: "Add new block"}} />
       </div>
     </div>
     <div class="s-info-list">

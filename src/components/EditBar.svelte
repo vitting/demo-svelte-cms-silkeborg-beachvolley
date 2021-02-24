@@ -29,17 +29,14 @@
     removeText: "Delete",
     saveText: "Save",
   };
-  export let role: EditRole = "none";
-
   export let showtext = false;
   const dispatch = createEventDispatcher();
 
-  function handleClick(e: MouseEvent, action: string) {
+  function handleClick(e: MouseEvent, choice: string) {
     const editbarAction: EditbarAction = {
-      action,
+      choice,
       clickX: e.pageX,
       clickY: e.pageY,
-      role,
     };
     dispatch("action", editbarAction);
   }
