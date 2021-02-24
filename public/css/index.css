@@ -80,7 +80,6 @@ button.btn {
   border-radius: var(--border-radius);
   border: none;
   outline-color: var(--button-outline-color);
-  font-size: 1rem; 
 }
 
 button.btn[disabled] {
