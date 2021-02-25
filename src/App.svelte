@@ -2,39 +2,14 @@
   import EditSingleModal from "./components/EditSingleModal.svelte";
   import EditEditorModal from "./components/EditEditorModal.svelte";
   import EditImageModal from "./components/EditImageModal.svelte";
-  import type { EditData } from "./interfaces/edit-data";
-  import type { ImageData } from "./interfaces/image-data";
   import SpinnerLoader from "./components/SpinnerLoader.svelte";
   import LoadingSpinnerStore from "./stores/loading-spinner.store";
-  import ImageService from "./services/image.service";
   import { Route, router } from "tinro";
   import Home from "./views/Home.svelte";
   import Login from "./views/Login.svelte";
   import { onMount } from "svelte";
   import AuthService from "./services/auth.service";
-  import { EditService } from "./services/edit.service";
-
-  async function handleSaveHtml(data: EditData) {
-    LoadingSpinnerStore.set(true);
-    const html = EditService.prepareHtmlToSave(data);
-    LoadingSpinnerStore.set(false);
-
-    console.log(html);
-
-    
-  }
-
-  async function handleCrop(data: ImageData) {
-    const uploadData = await ImageService.uploadImages(
-      data.dataWebp,
-      data.dataJpeg,
-      data.width,
-      data.height,
-      data.filename
-    );
-    
-  }
-
+  
   onMount(async () => {
     const user = await AuthService.getUserInit();
     if (!user) {

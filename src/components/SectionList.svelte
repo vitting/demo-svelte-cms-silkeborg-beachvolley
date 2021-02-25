@@ -16,9 +16,9 @@
     </div>
     <div class="s-info-list">
       {#each items as item}
-        <div>
+        <!-- <div class="item"> -->
           <SectionListItem {editMode} {theme} {item} />
-        </div>
+        <!-- </div> -->
       {/each}
     </div>
   </div>
@@ -26,9 +26,12 @@
 
 <style>
   .s-info-list {
-    display: grid;
+    display: flex;
+    flex-wrap: wrap;
+    /* gap: 10px; */
+    /* display: grid;
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 1.5rem;
+    gap: 1.5rem; */
   }
 
   .s-list-editbar {
